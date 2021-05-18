@@ -1,3 +1,4 @@
+/* eslint-disable linebreak-style */
 const path = require('path');
 
 const rules = [{
@@ -23,7 +24,7 @@ const rules = [{
 
 module.exports = {
   mode: 'development',
-  entry: path.resolve(__dirname, './client/index.jsx'),
+  entry: path.resolve(__dirname, './index.jsx'),
   output: {
     path: path.resolve(__dirname, 'build'),
     publicPath: '/',
@@ -35,7 +36,7 @@ module.exports = {
 
   devServer: {
     publicPath: '/build',
-    // port: 9000,
+    port: 9000,
   },
   resolve: {
     extensions: ['.js', '.jsx'],
