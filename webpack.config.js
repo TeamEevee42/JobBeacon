@@ -24,7 +24,7 @@ const rules = [{
 
 module.exports = {
   mode: 'development',
-  entry: path.resolve(__dirname, './index.jsx'),
+  entry: path.resolve(__dirname, './client/index.jsx'),
   output: {
     path: path.resolve(__dirname, 'build'),
     publicPath: '/',
