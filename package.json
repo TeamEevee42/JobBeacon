@@ -2,10 +2,11 @@
   "name": "jobbeacon",
   "version": "1.0.0",
   "description": "Track job listings",
-  "main": "index.js",
+  "main": "server/server.js",
   "scripts": {
-    "test": "jest --verbose",
-    "dev": "webpack serve"
+    "start": "nodemon server/server.js",
+    "dev": "webpack serve",
+    "test": "jest --verbose"
   },
   "repository": {
     "type": "git",
@@ -18,6 +19,7 @@
   },
   "homepage": "https://github.com/TeamEevee42/JobBeacon#readme",
   "dependencies": {
+    "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "react": "^17.0.2",
     "react-dom": "16.x"
