@@ -19,12 +19,10 @@
   },
   "homepage": "https://github.com/TeamEevee42/JobBeacon#readme",
   "dependencies": {
-<<<<<<< HEAD
     "@material-ui/core": "^4.11.4",
-=======
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
->>>>>>> 842e1c3693c55c5fad9e51c020f2c6109732b1f8
+    "pg": "^8.6.0",
     "react": "^17.0.2",
     "react-dom": "16.x"
   },
