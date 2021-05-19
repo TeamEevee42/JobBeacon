@@ -3,10 +3,9 @@ const db = require('../models/jobModels.js');
 const jobController = {};
 
 jobController.getJobs = (req, res, next) => {
-  co
-  db.query('SELECT * FROM job_posting')
+  db.query('SELECT * FROM job_listing')
     .then(((results) => {
-      console.log(results);
+      res.locals.jobs = results
       next();
     }
     ));
