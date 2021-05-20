@@ -1,11 +1,15 @@
 /* eslint-disable linebreak-style */
-import React from 'react';
+import React, {useState} from 'react';
 import FilterContainer from './FilterContainer';
 import JobListContainer from './JobListContainer';
 import AddModal from '../components/AddModal';
 // main container to be used in pages
 
 export default function MainContainer() {
+  const [filters, setFilters] = useState({});
+  
+
+
   return (
     <main>
       <header>
@@ -13,11 +17,11 @@ export default function MainContainer() {
           Job Beacon
         </h1>
       </header>
-      <FilterContainer />
+      <FilterContainer action = {(value) => setFilters(value)}/>
       <div>
         <AddModal />
       </div>
-      <JobListContainer />
+      <JobListContainer filters={filters}/>
     </main>
   );
 }

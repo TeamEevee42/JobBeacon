@@ -37,8 +37,8 @@ export default function AddModal() {
         Add Job
       </Button>
       <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+        aria-labelledby="inputDetailsTitle"
+        aria-describedby="details"
         className={classes.modal}
         open={open}
         onClose={handleClose}
@@ -50,8 +50,8 @@ export default function AddModal() {
       >
         <Fade in={open}>
           <div className={classes.paper}>
-            <h2 id="transition-modal-title">Input Job Details</h2>
-            <p id="transition-modal-description">Details go here</p>
+            <h2 id="inputDetailsTitle">Input Job Details</h2>
+            <p id="details">Details go here</p>
           </div>
         </Fade>
       </Modal>

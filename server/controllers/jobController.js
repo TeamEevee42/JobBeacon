@@ -4,7 +4,7 @@ const jobController = {};
 
 // Get Jobs
 jobController.getJobs = (req, res, next) => {
-  console.log('query', req.query)
+  // console.log('filers', req.query)
   // Store filters from request
   const filters = req.query;
 
@@ -27,7 +27,8 @@ jobController.getJobs = (req, res, next) => {
     const filterArr = Object.keys(filters);
     if (filterArr.length > 0) {
       filterArr.forEach((prop) => {
-        condition.length < 1 ? condition += ' WHERE ' : condition += ' AND ';
+        if (prop!= 'tech') condition.length < 1 ? condition += ' WHERE ' : condition += ' AND ';
+
         switch (prop) {
           case ('city'):
             condition += `city.city_name = '${filters[prop]}'`;
@@ -38,11 +39,11 @@ jobController.getJobs = (req, res, next) => {
           case ('seniority'):
             condition += `seniority.description = '${filters[prop]}'`;
             break;
-          case ('worklocation'):
+          case ('workLocation'):
             condition += `remote.description = '${filters[prop]}'`;
             break;
-          case ('tech'):
-            condition += `tech.description = '${filters[prop]}'`;
+          case ('status'):
+            condition += `status.description = '${filters[prop]}'`;
             break;
           default:
             break;
@@ -61,10 +62,9 @@ jobController.getJobs = (req, res, next) => {
       // Store ids of jobs listings in an array
       const jobIds = [];
       jobs.forEach((el) => jobIds.push(el._id))
-      console.log(jobIds)
 
       res.locals.jobs = jobs;
-      res.locals.jobIds = jobIds
+      res.locals.jobIds = jobIds;
       return next();
     })
     .catch((err) => {
@@ -75,7 +75,15 @@ jobController.getJobs = (req, res, next) => {
 // Get Techstack for jobs stored in jobIds
 jobController.getTech = (req, res, next) => {
 
-  const baseQuery = `SELECT j._id, tech.name 
+
+  const filters = req.query;
+  const tech = filters["tech"]
+
+  // const filters = res.locals.filters;
+  // const tech = filters.tech;
+
+
+  const baseQuery = `SELECT j._id as job_id, tech.name 
   FROM job_listing j
   INNER JOIN job_tech jt 
   ON j._id = jt.job_id
@@ -85,13 +93,24 @@ jobController.getTech = (req, res, next) => {
   // Conditions 
   let condition = '';
   const jobIds = res.locals.jobIds;
-
+  
+  // Fillter by Jobs
   jobIds.forEach(el => {
     condition.length < 1? condition += ' WHERE ': condition += ' OR ';
     condition += `j._id = ${el}`
   })
 
-  const query = `${baseQuery + condition};`;
+  // Filter by tech stack
+  if(tech) {
+    condition.length < 1? condition += ' WHERE ': condition += ' OR ';
+    condition += `tech.name = '${tech}'`
+  }
+
+
+  const query = `${baseQuery} ${condition};`;
+
+  console.log('tech query', query)
+
 
   db.query(query)
   .then(results => {
@@ -118,7 +137,6 @@ jobController.postJob = (req, res, next) => {
       (SELECT city._id FROM city WHERE city.city_name = '${city}'),
       '${description}'
       );`
-  console.log(baseQuery)
 
   db.query(baseQuery)
   .then(results => {
