@@ -1,5 +1,5 @@
 /* eslint-disable linebreak-style */
-import React, {useEffect, useState} from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -16,6 +16,7 @@ import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import axios from 'axios'
+import { TransferWithinAStationOutlined } from '@material-ui/icons';
 
 const useRowStyles = makeStyles({
   root: {
@@ -98,14 +99,33 @@ Row.propTypes = {
 // ];
 
 
-export default function JobListContainer(props) {
-  const [rows, setRows] = useState([])
+export default class JobListContainer extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      rows: [],
+    }
+  }
 
+  componentWillReceiveProps(nextProps){
+    if(nextProps != this.props){
+      const filterObj = nextProps.filters;
+      console.log('filter in receive props', filterObj)
 
+      const localRows = [];
+      axios.get('http://localhost:3000/job', filterObj)
+      .then(result => {
+        result["data"]["jobs"].forEach((job) => 
+        localRows.push(createData(job.title, job.url, job.seniority, job.workLocation, job.city, job.status, job.description)));
+      })
+      .then(() => this.setState({rows: localRows}))
+      .catch(error => console.log(error));
+    }
+  }
 
-  useEffect(() => {
-    const filterObj = props.filters;
-    console.log('hello')
+  componentDidMount(){
+    const filterObj = this.props.filters;
+    console.log('filter in joblist', filterObj)
 
     const localRows = [];
     axios.get('http://localhost:3000/job', filterObj)
@@ -113,31 +133,36 @@ export default function JobListContainer(props) {
       result["data"]["jobs"].forEach((job) => 
       localRows.push(createData(job.title, job.url, job.seniority, job.workLocation, job.city, job.status, job.description)));
     })
-    .then(() => setRows(localRows))
+    .then(() => this.setState({rows: localRows}))
     .catch(error => console.log(error));
-  })
-   
+  }
 
-  return (
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Job</TableCell>
-            <TableCell align="right">URL</TableCell>
-            <TableCell align="right">Seniority</TableCell>
-            <TableCell align="right">Work Location</TableCell>
-            <TableCell align="right">City</TableCell>
-            <TableCell align="right">Status</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <Row key={row.job} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+   
+  render(){
+
+    return (
+      <div>
+        <TableContainer component={Paper}>
+          <Table aria-label="collapsible table">
+            <TableHead>
+              <TableRow>
+                <TableCell />
+                <TableCell>Job</TableCell>
+                <TableCell align="right">URL</TableCell>
+                <TableCell align="right">Seniority</TableCell>
+                <TableCell align="right">Work Location</TableCell>
+                <TableCell align="right">City</TableCell>
+                <TableCell align="right">Status</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.state.rows.map((row) => (
+                <Row key={row.job} row={row} />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+    );
+  }
 }

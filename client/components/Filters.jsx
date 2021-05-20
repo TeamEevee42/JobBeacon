@@ -29,7 +29,8 @@ export default function Filters(props) {
   const [city, setCity] = React.useState('');
   const [status, setStatus] = React.useState('');
 
-  useEffect(() => {    
+  useEffect(() => {
+    console.log('in useeffect')    
     // Iterate through filter states and push non-empty states to filter object
     const filterObj = {
       params: {commitment, seniority, tech, workLocation, city, status}
@@ -39,9 +40,26 @@ export default function Filters(props) {
       if(filterObj["params"][prop].length<1) delete filterObj["params"][prop];
     }
 
-    // props.action(filterObj);
+    props.action(filterObj);
 
-  })
+  }, [])
+
+  const filter = () => {   
+    // Iterate through filter states and push non-empty states to filter object
+    const filterObj = {
+      params: {commitment, seniority, tech, workLocation, city, status}
+    }
+
+    for(const prop in filterObj["params"]){
+      if(filterObj["params"][prop].length<1) delete filterObj["params"][prop];
+    }
+    console.log(filterObj)
+
+    props.action(filterObj);
+
+  }
+
+  
 
 
 
@@ -76,7 +94,7 @@ export default function Filters(props) {
           <MenuItem value="">
             <em>None</em>
           </MenuItem>
-          <MenuItem value="junior">Junior</MenuItem>
+          <MenuItem value="intern">Intern</MenuItem>
           <MenuItem value="mid-level">Mid-Level</MenuItem>
           <MenuItem value="senior">Senior</MenuItem>
           <MenuItem value="staff">Staff</MenuItem>
@@ -164,7 +182,7 @@ export default function Filters(props) {
           <MenuItem value="Accepted">Accepted</MenuItem>
         </Select>
       </FormControl>
-      <Button className={classes.filterButton} variant="contained" color="default">
+      <Button className={classes.filterButton} variant="contained" color="default" onClick = {() => filter()}>
         Filter
       </Button>
     </div>
