@@ -1,11 +1,12 @@
 /* eslint-disable linebreak-style */
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import Button from '@material-ui/core/Button';
+import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -26,6 +27,22 @@ export default function Filters() {
   const [locationType, setLocationType] = React.useState('');
   const [city, setCity] = React.useState('');
   const [status, setStatus] = React.useState('');
+
+  useEffect(() => {    
+    const filters = {
+      params: {
+          "city": city,
+          "commitment": jobType,
+          "seniority": jobLevel,
+          "tech": technology,
+          "workLocation": locationType,
+          "status": status,
+      }
+    }; 
+    axios.get('http://localhost:3000/job', filters)
+    .then(result => console.log(result))
+    .catch(error => console.log(error));
+  })
 
   return (
     <div id="FilterContainer">
@@ -80,7 +97,7 @@ export default function Filters() {
           <MenuItem value="Javascript">Javascript</MenuItem>
           <MenuItem value="React">React</MenuItem>
           <MenuItem value="Node">Node</MenuItem>
-          <MenuItem value="Express">Node</MenuItem>
+          <MenuItem value="Express">Express</MenuItem>
           <MenuItem value="SQL">SQL</MenuItem>
           <MenuItem value="MongoDB">MongoDB</MenuItem>
         </Select>
