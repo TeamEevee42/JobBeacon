@@ -102,32 +102,18 @@ jobController.postJob = (req, res, next) => {
   const {commitment, description, seniority, postingDate, workLocation, title, url, city, salary} = req.body;
 
   // Posting new job. Search specific tables to find job ids when posting. 
-  // baseQuery = `
-  // INSERT INTO job_listing (commitment_id, created_on, seniority_id, remote_id, title, url, salary, city_id, description, posting_date)
-  // VALUES 
-  //   (
-  //     (SELECT commitment._id FROM commitment WHERE commitment.description = '${commitment}'), 
-  //     '2021-08-12', 
-  //     (SELECT seniority._id FROM seniority WHERE seniority.description = '${seniority}'), 
-  //     (SELECT remote._id FROM remote WHERE remote.description = '${workLocation}'), 
-  //     '${title}', 
-  //     '${url}',
-  //     '${salary}',
-  //     (SELECT city._id FROM city WHERE city.city_name = '${city}'),
-  //     '${description}',
-  //     '${postingDate}'
-  //   );`
   const baseQuery = `
-    INSERT INTO job_listing (commitment_id, created_on, seniority_id, remote_id, title, url, salary, city_id)
+    INSERT INTO job_listing (commitment_id, created_on, seniority_id, remote_id, title, url, salary, city_id, description)
     VALUES 
       ((SELECT commitment._id FROM commitment WHERE commitment.description = '${commitment}'), 
-      '2021-05-15', 
+      '${new Date().toISOString().slice(0, 19).replace('T', ' ')}', 
       (SELECT seniority._id FROM seniority WHERE seniority.description = '${seniority}'), 
       (SELECT remote._id FROM remote WHERE remote.description = '${workLocation}'), 
       '${title}', 
       '${url}',
       '${salary}',
-      (SELECT city._id FROM city WHERE city.city_name = '${city}')
+      (SELECT city._id FROM city WHERE city.city_name = '${city}'),
+      '${description}'
       );`
   console.log(baseQuery)
 
