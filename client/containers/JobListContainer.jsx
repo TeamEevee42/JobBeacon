@@ -50,9 +50,7 @@ function Row(props) {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </TableCell>
-        <TableCell component="th" scope="row">
-          {row.job}
-        </TableCell>
+        <TableCell component="th" scope="row">{row.job}</TableCell>
         <TableCell align="right">{row.jobLevel}</TableCell>
         <TableCell align="right">{row.technology}</TableCell>
         <TableCell align="right">{row.locationType}</TableCell>
@@ -91,10 +89,10 @@ Row.propTypes = {
 
 const rows = [
   createData('Software Engineer - Google', 'Mid-level', 'Javascript', 'Remote', 'Los Angeles', 'Applied', 'Cool description'),
-  createData('Software Engineer - Facebook', 'Mid-level', 'Javascript', 'Remote', 'Los Angeles', 'Applied', 'Cool description'),
-  createData('Software Engineer - Amazon', 'Mid-level', 'Javascript', 'Remote', 'Los Angeles', 'Applied', 'Cool description'),
-  createData('Software Engineer - Apple', 'Mid-level', 'Javascript', 'Remote', 'Los Angeles', 'Applied', 'Cool description'),
-  createData('Software Engineer - Netflix', 'Mid-level', 'Javascript', 'Remote', 'Los Angeles', 'Applied', 'Cool description'),
+  createData('Software Engineer - Facebook', 'Mid-level', 'Javascript', 'Remote', 'Los Angeles', 'Applied', 'Another cool description'),
+  createData('Software Engineer - Amazon', 'Mid-level', 'Javascript', 'Remote', 'Los Angeles', 'Applied', 'A different cool description'),
+  createData('Software Engineer - Apple', 'Mid-level', 'Javascript', 'Remote', 'Los Angeles', 'Applied', 'Yet another cool description'),
+  createData('Software Engineer - Netflix', 'Mid-level', 'Javascript', 'Remote', 'Los Angeles', 'Applied', 'Too many cool descriptions'),
 ];
 
 // Component did mount for fetching data and populating rows
