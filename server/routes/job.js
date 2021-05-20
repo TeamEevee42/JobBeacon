@@ -8,6 +8,15 @@ const router = express.Router();
 // @URL GET /job
 router.get('/',
   jobController.getJobs,
-  (req, res) => res.status(200).json(res.locals));
+  jobController.getTech,
+  (req, res) => res.status(200).json(res.locals)
+);
+
+router.post('/',
+  jobController.postJob,
+  jobController.getJobs,
+  jobController.getTech,
+  (req, res) => res.status(200).json(res.locals)
+);
 
 module.exports = router;
