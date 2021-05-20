@@ -69,7 +69,7 @@ jobController.getJobs = (req, res, next) => {
     })
     .catch((err) => {
       next({err})
-      })
+    })
 };
 
 // Get Techstack for jobs stored in jobIds
@@ -94,10 +94,10 @@ jobController.getTech = (req, res, next) => {
   const query = `${baseQuery + condition};`;
 
   db.query(query)
-  .then(results => {
-    res.locals.techStack = results['rows']
-    next()
-  })
+    .then(results => {
+      res.locals.techStack = results['rows']
+      next()
+    })
 }
 
 // Post Job
@@ -117,15 +117,20 @@ jobController.postJob = (req, res, next) => {
       '${salary}',
       (SELECT city._id FROM city WHERE city.city_name = '${city}'),
       '${description}'
-      );`
-  console.log(baseQuery)
+      );`;
+  // console.log(baseQuery);
 
   db.query(baseQuery)
-  .then(results => {
-    res.locals.jobs = results["rows"];
-    next();
-  })
-  .catch(err => next({err}))
-}
+    .then((result) => {
+      // console.log(result);
+      res.locals.jobs = result.rows;
+      next();
+    })
+    .catch((err) => next({
+      log: `postJob database error - ${err}`,
+      status: 500,
+      message: { err: 'An error occurred' },
+    }));
+};
 
 module.exports = jobController;
