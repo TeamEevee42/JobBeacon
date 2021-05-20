@@ -3,11 +3,15 @@ const path = require('path');
 const express = require('express');
 const bodyParser = require('body-parser');
 const jobRouter = require('./routes/job');
+const cors = require('cors');
 
 const app = express();
 
 /* We might need this static /dist thing later later.. */
 // app.use(express.static(path.resolve(__dirname, '../dist')));
+
+
+app.use(cors());
 
 // Parsing Stuff Here
 app.use(express.json());

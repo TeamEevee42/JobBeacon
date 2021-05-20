@@ -1,5 +1,5 @@
 /* eslint-disable linebreak-style */
-import React from 'react';
+import React, {useEffect} from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -15,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import axios from 'axios'
 
 const useRowStyles = makeStyles({
   root: {
@@ -95,11 +96,11 @@ const rows = [
   createData('Software Engineer - Netflix', 'Mid-level', 'Javascript', 'Remote', 'Los Angeles', 'Applied', 'Too many cool descriptions'),
 ];
 
-// Component did mount for fetching data and populating rows
-// componentDidMount() {
-//   fetch()
-// }
+
 export default function JobListContainer() {
+
+  
+
   return (
     <TableContainer component={Paper}>
       <Table aria-label="collapsible table">
