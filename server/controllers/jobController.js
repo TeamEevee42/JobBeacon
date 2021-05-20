@@ -4,8 +4,9 @@ const jobController = {};
 
 // Get Jobs
 jobController.getJobs = (req, res, next) => {
+  console.log('query', req.query)
   // Store filters from request
-  const { filters } = req.body;
+  const filters = req.query;
 
   const baseQuery = `SELECT jobs._id as _id, commitment.description AS commitment, jobs.created_on, jobs.description, seniority.description AS seniority,
   jobs.modified_on, jobs.posting_date, remote.description AS workLocation, jobs.title, jobs.url,
@@ -66,7 +67,9 @@ jobController.getJobs = (req, res, next) => {
       res.locals.jobIds = jobIds
       return next();
     })
-    .catch((err) => next(err));
+    .catch((err) => {
+      next({err})
+      })
 };
 
 // Get Techstack for jobs stored in jobIds
@@ -119,7 +122,6 @@ jobController.postJob = (req, res, next) => {
 
   db.query(baseQuery)
   .then(results => {
-    console.log(results)
     res.locals.jobs = results["rows"];
     next();
   })

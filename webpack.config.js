@@ -36,7 +36,7 @@ module.exports = {
 
   devServer: {
     publicPath: '/build',
-    port: 9000,
+    port: 9001,
   },
   resolve: {
     extensions: ['.js', '.jsx'],
