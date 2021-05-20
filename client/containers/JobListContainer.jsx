@@ -1,5 +1,5 @@
 /* eslint-disable linebreak-style */
-import React, {useEffect} from 'react';
+import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import { makeStyles } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
@@ -16,6 +16,7 @@ import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import axios from 'axios'
+import { TransferWithinAStationOutlined } from '@material-ui/icons';
 
 const useRowStyles = makeStyles({
   root: {
@@ -25,12 +26,12 @@ const useRowStyles = makeStyles({
   },
 });
 
-function createData(job, jobLevel, technology, locationType, city, status, description) {
+function createData(job, url, seniority, workLocation, city, status, description) {
   return {
     job,
-    jobLevel,
-    technology,
-    locationType,
+    url,
+    seniority,
+    workLocation,
     city,
     status,
     description,
@@ -52,9 +53,9 @@ function Row(props) {
           </IconButton>
         </TableCell>
         <TableCell component="th" scope="row">{row.job}</TableCell>
-        <TableCell align="right">{row.jobLevel}</TableCell>
-        <TableCell align="right">{row.technology}</TableCell>
-        <TableCell align="right">{row.locationType}</TableCell>
+        <TableCell align="right">{row.url}</TableCell>
+        <TableCell align="right">{row.seniority}</TableCell>
+        <TableCell align="right">{row.workLocation}</TableCell>
         <TableCell align="right">{row.city}</TableCell>
         <TableCell align="right">{row.status}</TableCell>
       </TableRow>
@@ -79,48 +80,89 @@ function Row(props) {
 Row.propTypes = {
   row: PropTypes.shape({
     job: PropTypes.string.isRequired,
-    jobLevel: PropTypes.string.isRequired,
-    technology: PropTypes.string.isRequired,
-    locationType: PropTypes.string.isRequired,
-    city: PropTypes.string.isRequired,
-    status: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    seniority: PropTypes.string,
+    workLocation: PropTypes.string,
+    city: PropTypes.string,
+    status: PropTypes.string,
+    description: PropTypes.string,
   }).isRequired,
 };
 
-const rows = [
-  createData('Software Engineer - Google', 'Mid-level', 'Javascript', 'Remote', 'Los Angeles', 'Applied', 'Cool description'),
-  createData('Software Engineer - Facebook', 'Mid-level', 'Javascript', 'Remote', 'Los Angeles', 'Applied', 'Another cool description'),
-  createData('Software Engineer - Amazon', 'Mid-level', 'Javascript', 'Remote', 'Los Angeles', 'Applied', 'A different cool description'),
-  createData('Software Engineer - Apple', 'Mid-level', 'Javascript', 'Remote', 'Los Angeles', 'Applied', 'Yet another cool description'),
-  createData('Software Engineer - Netflix', 'Mid-level', 'Javascript', 'Remote', 'Los Angeles', 'Applied', 'Too many cool descriptions'),
-];
+//DUMMY DATA
+// const rows = [
+//   createData('Software Engineer - Google', 'Mid-level', 'Remote', 'Los Angeles', 'Applied', 'Cool description'),
+//   createData('Software Engineer - Facebook', 'Mid-level', 'Remote', 'Los Angeles', 'Applied', 'Another cool description'),
+//   createData('Software Engineer - Amazon', 'Mid-level', 'Remote', 'Los Angeles', 'Applied', 'A different cool description'),
+//   createData('Software Engineer - Apple', 'Mid-level', 'Remote', 'Los Angeles', 'Applied', 'Yet another cool description'),
+//   createData('Software Engineer - Netflix', 'Mid-level', 'Remote', 'Los Angeles', 'Applied', 'Too many cool descriptions'),
+// ];
 
 
-export default function JobListContainer() {
+export default class JobListContainer extends Component {
+  constructor(props){
+    super(props)
+    this.state = {
+      rows: [],
+    }
+  }
 
-  
+  componentWillReceiveProps(nextProps){
+    if(nextProps != this.props){
+      const filterObj = nextProps.filters;
+      console.log('filter in receive props', filterObj)
 
-  return (
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table">
-        <TableHead>
-          <TableRow>
-            <TableCell />
-            <TableCell>Job</TableCell>
-            <TableCell align="right">Job Level</TableCell>
-            <TableCell align="right">Technology</TableCell>
-            <TableCell align="right">Location Type</TableCell>
-            <TableCell align="right">City</TableCell>
-            <TableCell align="right">Status</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <Row key={row.job} row={row} />
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-  );
+      const localRows = [];
+      axios.get('http://localhost:3000/job', filterObj)
+      .then(result => {
+        result["data"]["jobs"].forEach((job) => 
+        localRows.push(createData(job.title, job.url, job.seniority, job.workLocation, job.city, job.status, job.description)));
+      })
+      .then(() => this.setState({rows: localRows}))
+      .catch(error => console.log(error));
+    }
+  }
+
+  componentDidMount(){
+    const filterObj = this.props.filters;
+    console.log('filter in joblist', filterObj)
+
+    const localRows = [];
+    axios.get('http://localhost:3000/job', filterObj)
+    .then(result => {
+      result["data"]["jobs"].forEach((job) => 
+      localRows.push(createData(job.title, job.url, job.seniority, job.workLocation, job.city, job.status, job.description)));
+    })
+    .then(() => this.setState({rows: localRows}))
+    .catch(error => console.log(error));
+  }
+
+   
+  render(){
+
+    return (
+      <div>
+        <TableContainer component={Paper}>
+          <Table aria-label="collapsible table">
+            <TableHead>
+              <TableRow>
+                <TableCell />
+                <TableCell>Job</TableCell>
+                <TableCell align="right">URL</TableCell>
+                <TableCell align="right">Seniority</TableCell>
+                <TableCell align="right">Work Location</TableCell>
+                <TableCell align="right">City</TableCell>
+                <TableCell align="right">Status</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.state.rows.map((row) => (
+                <Row key={row.job} row={row} />
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+    );
+  }
 }

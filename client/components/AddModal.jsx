@@ -73,8 +73,8 @@ export default function AddModal() {
         Add Job
       </Button>
       <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+        aria-labelledby="inputDetailsTitle"
+        aria-describedby="details"
         className={classes.modal}
         open={open}
         onClose={handleClose}

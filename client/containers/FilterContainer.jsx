@@ -3,8 +3,12 @@ import React from 'react';
 import Filters from '../components/Filters';
 
 // Holds all of our filters
-export default function FilterContainer() {
+export default function FilterContainer(props) {
+
+
   return (
-    <Filters />
+    <Filters 
+    action={(filterObj) => props.action(filterObj)}
+    />
   );
 }
