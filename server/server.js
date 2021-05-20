@@ -1,16 +1,18 @@
 const dotenv = require('dotenv').config();
 const path = require('path');
 const express = require('express');
+const bodyParser = require('body-parser');
 const jobRouter = require('./routes/job');
 
 const app = express();
-const port = process.env.PORT || 3000;
 
 /* We might need this static /dist thing later later.. */
 // app.use(express.static(path.resolve(__dirname, '../dist')));
 
 // Parsing Stuff Here
 app.use(express.json());
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 // Route handlers
 app.use('/job', jobRouter);
@@ -25,7 +27,7 @@ app.use((err, req, res, next) => {
     status: 500,
     message: { err: 'An error occurred' },
   };
-  const errorObj = Object.assign({}, defaultErr, err);
+  const errorObj = { ...defaultErr, ...err };
   console.error(errorObj.log);
   return res.status(errorObj.status).json(errorObj.message);
 });
