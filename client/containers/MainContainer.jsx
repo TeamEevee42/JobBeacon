@@ -1,13 +1,11 @@
 /* eslint-disable linebreak-style */
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import FilterContainer from './FilterContainer';
 import JobListContainer from './JobListContainer';
-import { PageContext } from '../App';
+import AddModal from '../components/AddModal';
 // main container to be used in pages
 
-export default function MainPageContainer() {
-  const { setPage } = React.useContext(PageContext);
+export default function MainContainer() {
   return (
     <main>
       <header>
@@ -17,9 +15,7 @@ export default function MainPageContainer() {
       </header>
       <FilterContainer />
       <div>
-        <Button variant="contained" color="primary" onClick={() => setPage('create')}>
-          Add Job
-        </Button>
+        <AddModal />
       </div>
       <JobListContainer />
     </main>
